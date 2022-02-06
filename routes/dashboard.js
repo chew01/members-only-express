@@ -1,9 +1,16 @@
-var express = require('express');
-var router = express.Router();
+const express = require('express');
+const router = express.Router();
+const indexController = require('../controllers/indexController');
+const userController = require('../controllers/userController');
 
-/* GET home page. */
-router.get('/', function (req, res, next) {
-  res.render('index', { title: 'Express' });
-});
+router.get('/', indexController.dashboard);
+
+router.get('/verify-member', userController.verify_member_get);
+
+router.post('/verify-member', userController.verify_member_post);
+
+router.get('/verify-admin', userController.verify_admin_get);
+
+router.post('/verify-admin', userController.verify_admin_post);
 
 module.exports = router;
