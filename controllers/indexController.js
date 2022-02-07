@@ -1,5 +1,5 @@
 exports.index = (req, res) => {
-  res.send('WIP: Index Page');
+  res.render('index');
 };
 
 exports.dashboard = (req, res) => {

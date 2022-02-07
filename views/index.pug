@@ -1,5 +1,9 @@
-extends layout
+extends public
 
 block content
-  h1= title
-  p Welcome to #{title}
+  .row.px-5.py-5
+    h1.text-center Clubhouse
+  .row.px-5.py-2
+    a.btn.btn-primary(href="/log-in") Log in 
+  .row.px-5.py-2
+    a.btn.btn-primary(href="/sign-up") Sign up
