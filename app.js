@@ -2,6 +2,7 @@ require('dotenv').config();
 const createError = require('http-errors');
 const express = require('express');
 const path = require('path');
+const session = require('express-session');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const mongoose = require('mongoose');
@@ -23,32 +24,39 @@ db.on('error', console.error.bind(console, 'mongo connection error'));
 
 // passportjs setup
 const passport = require('passport');
-const LocalStrategy = require('passport-local');
-const strategy = new LocalStrategy(function verify(email, password, cb) {
-  User.findOne({ email: email }, (err, user) => {
-    if (err) {
-      return cb(err);
-    }
-    if (!user) {
-      cb(null, false, { message: 'Incorrect email or password.' });
-    }
-    bcrypt.compare(password, user.password, (err, res) => {
-      if (res) {
-        return cb(null, user);
-      } else {
+const LocalStrategy = require('passport-local').Strategy;
+passport.use(
+  new LocalStrategy({ usernameField: 'email' }, function verify(
+    username,
+    password,
+    cb
+  ) {
+    User.findOne({ email: username }, (err, user) => {
+      if (err) {
+        return cb(err);
+      }
+      if (!user) {
         return cb(null, false, { message: 'Incorrect email or password.' });
       }
+      bcrypt.compare(password, user.password, (err, res) => {
+        if (err) {
+          return cb(err);
+        }
+        if (res) {
+          return cb(null, user);
+        } else {
+          return cb(null, false, { message: 'Incorrect email or password.' });
+        }
+      });
     });
-    return cb(null, user);
-  });
-});
-passport.use(strategy);
+  })
+);
 
 passport.serializeUser(function (user, cb) {
   cb(null, user.id);
 });
 
-passport.deserializeUser(function (user, cb) {
+passport.deserializeUser(function (id, cb) {
   User.findById(id, function (err, user) {
     cb(null, user);
   });
@@ -59,10 +67,19 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
 
 app.use(logger('dev'));
+app.use(
+  session({ secret: 'testings', resave: false, saveUninitialized: true })
+);
+app.use(passport.initialize());
+app.use(passport.session());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use((req, res, next) => {
+  res.locals.currentUser = req.user;
+  next();
+});
 
 app.use('/', indexRouter);
 app.use('/dashboard', dashboardRouter);

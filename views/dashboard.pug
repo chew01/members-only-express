@@ -1,0 +1,30 @@
+extends layout 
+
+block nav 
+    .container-fluid
+      a.navbar-brand(href="/dashboard") Home
+      ul.navbar-nav
+        li.nav-item
+          a.nav-link(href="/bulletin") Bulletin 
+        li.nav-item
+          a.nav-link(href="/dashboard/verify-member") Verify Membership
+        li.nav-item
+          a.nav-link(href="/dashboard/log-out") Log out
+
+block content
+  h1.py-2 Dashboard
+  p Welcome to the dashboard, #{user.first_name} #{user.last_name}.
+    if user.isAdmin
+      p You are currently an Admin.
+    else if user.isMember 
+      p You are currently a verified Member.
+    else 
+      p You are currently unverified. Please #[a(href="/dashboard/verify-member") verify your membership].
+
+  h2 Site statistics
+  p #[strong Total number of users:] #{count.users}
+  ul
+    li Unverified users: #{count.unverified}
+    li Verified users: #{count.member}
+    li Administrators: #{count.admin}
+  p #[strong Number of posts:] #{count.posts}

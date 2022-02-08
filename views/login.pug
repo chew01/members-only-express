@@ -1,0 +1,17 @@
+extends public 
+
+block content
+  h1.text-center.p-3 Log In
+  form(action="", method="post")  
+    .p-2
+      label.form-label(for="email") Email
+      input#email.form-control(type="email" name="email" required value=(undefined==user ? '' : user.email))
+    .p-2
+      label.form-label(for="password") Password 
+      input#password.form-control(type="password" name="password" required)
+    .p-2
+      button.btn.btn-primary(type="submit") Log in
+
+    if error
+      ul
+        li #{error[error.length - 1]}

@@ -1,13 +1,21 @@
 const { body, validationResult } = require('express-validator');
+const passport = require('passport');
 const User = require('../models/user');
 
-exports.login_get = (req, res) => {
-  res.send('WIP: Login get');
+exports.log_out = (req, res) => {
+  req.logout();
+  res.redirect('/');
 };
 
-exports.login_post = (req, res) => {
-  res.send('WIP: Login post');
+exports.login_get = (req, res) => {
+  res.render('login', { error: req.session.messages });
 };
+
+exports.login_post = passport.authenticate('local', {
+  successRedirect: '/dashboard',
+  failureRedirect: '/log-in',
+  failureMessage: true,
+});
 
 exports.signup_get = (req, res) => {
   res.render('signup');

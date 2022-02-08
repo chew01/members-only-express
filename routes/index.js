@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const indexController = require('../controllers/indexController');
 const userController = require('../controllers/userController');
-const { denyIfMember, denyIfLoggedIn } = require('../routes/auth');
+const { denyIfLoggedIn } = require('../routes/auth');
 
 router.get('/', denyIfLoggedIn, indexController.index);
 
