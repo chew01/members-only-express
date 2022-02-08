@@ -1,6 +1,8 @@
 const { body, validationResult } = require('express-validator');
 const passport = require('passport');
 const User = require('../models/user');
+const Code = require('../models/code');
+const bcrypt = require('bcryptjs');
 
 exports.log_out = (req, res) => {
   req.logout();
@@ -82,17 +84,85 @@ exports.signup_post = [
 ];
 
 exports.verify_member_get = (req, res) => {
-  res.send('WIP: Verify Member Get');
+  res.render('verify_form', {
+    type: 'Verify Membership',
+    destination: '/dashboard/verify-member',
+    rank: 'Verified Members',
+  });
 };
 
-exports.verify_member_post = (req, res) => {
-  res.send('WIP: Verify Member Post');
+exports.verify_member_post = (req, res, next) => {
+  Code.findOne({ type: 'member' }).exec((err, result) => {
+    if (err) {
+      return next(err);
+    }
+    bcrypt.compare(req.body.passcode, result.code, (err, isMatch) => {
+      if (err) {
+        return next(err);
+      }
+      if (isMatch) {
+        // Password is correct
+        User.findByIdAndUpdate(
+          res.locals.currentUser._id,
+          { isMember: true },
+          (err, result) => {
+            if (err) {
+              next(err);
+            }
+            return res.redirect('/dashboard');
+          }
+        );
+      } else {
+        // Password is incorrect
+        res.render('verify_form', {
+          type: 'Verify Membership',
+          destination: '/dashboard/verify-member',
+          rank: 'Verified Members',
+          error: 'Incorrect password.',
+        });
+      }
+    });
+  });
 };
 
 exports.verify_admin_get = (req, res) => {
-  res.send('WIP: Verify Admin Get');
+  res.render('verify_form', {
+    type: 'Verify Admin',
+    destination: '/dashboard/verify-admin',
+    rank: 'Administrators',
+  });
 };
 
-exports.verify_admin_post = (req, res) => {
-  res.send('WIP: Verify Admin Post');
+exports.verify_admin_post = (req, res, next) => {
+  Code.findOne({ type: 'admin' }).exec((err, result) => {
+    if (err) {
+      return next(err);
+    }
+    bcrypt.compare(req.body.passcode, result.code, (err, isMatch) => {
+      if (err) {
+        return next(err);
+      }
+      if (isMatch) {
+        // Password is correct
+        User.findByIdAndUpdate(
+          res.locals.currentUser._id,
+          { isAdmin: true },
+          (err, result) => {
+            if (err) {
+              next(err);
+            }
+            return res.redirect('/dashboard');
+          }
+        );
+      } else {
+        // Password is incorrect
+        res.render('verify_form', {
+          type: 'Verify Admin',
+          destination: '/dashboard/verify-admin',
+          rank: 'Administrators',
+          error: 'Incorrect password.',
+        });
+      }
+    });
+  });
 };

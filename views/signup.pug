@@ -3,23 +3,22 @@ extends public
 block content 
   h1.text-center.p-3 Sign Up
   form(action="", method="post")  
-    .p-2
-      label.form-label(for="first_name") First Name 
-      input#first_name.form-control(name="first_name" required value=(undefined==user ? '' : user.first_name))
-    .p-2
-      label.form-label(for="last_name") Last Name 
-      input#last_name.form-control(name="last_name" required value=(undefined==user ? '' : user.last_name))
-    .p-2
-      label.form-label(for="email") Email 
-      input#email.form-control(type="email" name="email" required value=(undefined==user ? '' : user.email))
-    .p-2
-      label.form-label(for="password") Password 
-      input#password.form-control(type="password" name="password" required)
-    .p-2
-      label.form-label(for="confirm") Confirm password 
-      input#confirm.form-control(type="password" name="confirm" required)
-    .p-2
-      button.btn.btn-primary(type="submit") Sign up
+    .form-floating.mb-3
+      input#first_name.form-control(name="first_name" required value=(undefined==user ? '' : user.first_name) placeholder="first name")
+      label(for="first_name") First Name 
+    .form-floating.mb-3
+      input#last_name.form-control(name="last_name" required value=(undefined==user ? '' : user.last_name) placeholder="last name")
+      label(for="last_name") Last Name 
+    .form-floating.mb-3
+      input#email.form-control(type="email" name="email" required value=(undefined==user ? '' : user.email) placeholder="email")
+      label(for="email") Email 
+    .form-floating.mb-3
+      input#password.form-control(type="password" name="password" required placeholder="password")
+      label(for="password") Password 
+    .form-floating.mb-3
+      input#confirm.form-control(type="password" name="confirm" required placeholder="confirm password")
+      label(for="confirm") Confirm password 
+    button.mb-3.btn.btn-primary.align-self-center(type="submit") Sign up
 
     if errors
       ul 

@@ -1,0 +1,23 @@
+extends layout 
+
+block nav 
+    .container-fluid
+      a.navbar-brand(href="/dashboard") Home
+      ul.navbar-nav
+        li.nav-item
+          a.nav-link(href="/bulletin") Bulletin 
+        li.nav-item
+          a.nav-link.active(href=destination) #{type}
+        li.nav-item
+          a.nav-link(href="/dashboard/log-out") Log out
+
+block content
+  h1.py-2= type
+  p Type in the verification password to gain elevated permissions available to #{rank}!
+  form(action="", method="post") 
+    .form-floating.mb-3
+      input#passcode.form-control(name="passcode" required placeholder="passcode")
+      label(for="passcode") Verification Password
+    if error 
+      p= error  
+    button.btn.btn-primary(type="submit") Verify

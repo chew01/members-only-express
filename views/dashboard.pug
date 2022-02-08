@@ -6,8 +6,12 @@ block nav
       ul.navbar-nav
         li.nav-item
           a.nav-link(href="/bulletin") Bulletin 
-        li.nav-item
-          a.nav-link(href="/dashboard/verify-member") Verify Membership
+        if (!user.isMember)
+          li.nav-item
+            a.nav-link(href="/dashboard/verify-member") Verify Membership
+        else if (!user.isAdmin)
+          li.nav-item
+            a.nav-link(href="/dashboard/verify-admin") Verify Admin
         li.nav-item
           a.nav-link(href="/dashboard/log-out") Log out
 
