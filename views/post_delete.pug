@@ -1,0 +1,27 @@
+extends layout 
+
+block nav 
+    .container-fluid
+      a.navbar-brand(href="/dashboard") Home
+      ul.navbar-nav
+        li.nav-item
+          a.nav-link.active(href="/bulletin") Bulletin 
+        li.nav-item 
+          a.nav-link(href="/bulletin/create") Create Post
+        if (!user.isAdmin)
+          li.nav-item
+            a.nav-link(href="/dashboard/verify-admin") Verify Admin
+        li.nav-item
+          a.nav-link(href="/dashboard/log-out") Log out
+
+block content
+  h1.py-2= post.title
+  p Post created by #[strong #{post.author.first_name} #{post.author.last_name}] at #{post.created_at}
+  p= post.content
+
+  hr
+  p Are you sure you want to delete this post?
+  form(action="", method="post") 
+    input#deleteInput.form-control(type="hidden", name="deleteInput", required, value=post._id)
+    button.btn.btn-primary.me-3(type="submit") Confirm 
+    a.btn.btn-secondary(href=post.url) Back

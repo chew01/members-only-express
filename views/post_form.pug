@@ -1,0 +1,30 @@
+extends layout 
+
+block nav 
+    .container-fluid
+      a.navbar-brand(href="/dashboard") Home
+      ul.navbar-nav
+        li.nav-item
+          a.nav-link(href="/bulletin") Bulletin 
+        li.nav-item 
+          a.nav-link.active(href="/bulletin/create") Create Post
+        if (!user.isAdmin)
+          li.nav-item
+            a.nav-link(href="/dashboard/verify-admin") Verify Admin
+        li.nav-item
+          a.nav-link(href="/dashboard/log-out") Log out
+
+block content
+  h1.py-2= title
+  form(action="", method="post") 
+    .form-floating.mb-3
+      input#title.form-control(name="title" required placeholder="title")
+      label(for="title") Title
+    .form-floating.mb-3
+      textarea#content.form-control(name="content" required placeholder="content")
+      label(for="content") Content
+    button.btn.btn-primary.mb-3(type="submit") Submit
+    if errors
+      ul 
+        for error in errors 
+          li #{error.msg}

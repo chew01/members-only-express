@@ -19,19 +19,12 @@ block nav
           a.nav-link(href="/dashboard/log-out") Log out
 
 block content
-  h1.py-2 Dashboard
-  p Welcome to the dashboard, #{user.first_name} #{user.last_name}.
-    if user.isAdmin
-      p You are currently an Admin.
-    else if user.isMember 
-      p You are currently a verified Member.
-    else 
-      p You are currently unverified. Please #[a(href="/dashboard/verify-member") verify your membership].
-
-  h2 Site statistics
-  p #[strong Total number of users:] #{count.users}
-  ul
-    li Unverified users: #{count.unverified}
-    li Verified users: #{count.member}
-    li Administrators: #{count.admin}
-  p #[strong Number of posts:] #{count.posts}
+  if (posts.length > 0)
+    for post in posts
+     a(href=post.url)
+      .container.border.p-3.mt-3.bg-light
+        h3 #{post.title}
+        p Post created by #[strong Anonymous] at #{post.created_at}
+        p #{post.content}
+  else 
+    p.p-5 There are no posts in this bulletin! #[a(href="/bulletin/create") Create a new post] (members only)

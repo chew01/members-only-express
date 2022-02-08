@@ -68,7 +68,11 @@ app.set('view engine', 'pug');
 
 app.use(logger('dev'));
 app.use(
-  session({ secret: 'testings', resave: false, saveUninitialized: true })
+  session({
+    secret: process.env.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: true,
+  })
 );
 app.use(passport.initialize());
 app.use(passport.session());

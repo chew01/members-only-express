@@ -27,6 +27,7 @@ router.post(
 
 router.get(
   '/verify-admin',
+  allowIfLoggedIn,
   allowIfMember,
   denyIfAdmin,
   userController.verify_admin_get
@@ -34,11 +35,12 @@ router.get(
 
 router.post(
   '/verify-admin',
+  allowIfLoggedIn,
   allowIfMember,
   denyIfAdmin,
   userController.verify_admin_post
 );
 
-router.get('/log-out', userController.log_out);
+router.get('/log-out', allowIfLoggedIn, userController.log_out);
 
 module.exports = router;
